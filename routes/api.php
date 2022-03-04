@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -15,13 +17,19 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/register', 'RegisterController@register');
-Route::post('/checkPhoneNumber', 'RegisterController@checkPhoneNumber')->middleware('auth:sanctum');
-// Route::post('/checkPhoneNumber',[])
-Route::post('/inputCheck', 'RegisterController@inputCheck');
 
-Route::get('/users', 'RegisterController@users');
+Route::post('/registerAdmin', [AuthController::class, 'registerAdmin']);
+Route::post('/login_admin', [AuthController::class, 'loginAdmin']);
+Route::post('/checkPhoneNumber', [RegisterController::class, 'checkPhoneNumber']);
+
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('/inputCheck', [RegisterController::class, 'inputCheck']);
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users/edit', [UserController::class, 'editUser']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
 
 Route::post('/listMemberTable', 'MemberController@listMemberTable');
 
 Route::post('/login', 'LoginController@login');
-Route::delete('/logout', 'LoginController@logout');

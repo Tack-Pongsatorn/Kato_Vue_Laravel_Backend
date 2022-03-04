@@ -5,11 +5,12 @@ namespace App\Models;
 use Hash;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use \DateTimeInterface;
 
 class Admin extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     protected $table = 'admins';
     protected $guarded = [];
